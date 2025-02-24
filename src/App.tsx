@@ -1,13 +1,13 @@
-import { Route, Routes } from 'react-router-dom';
 import Home from './Containers/Home/Home.tsx';
+import Layout from './components/Layout/Layout.tsx';
 
 
 const App = () => {
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Home/>}/>
-      </Routes>
+      <Layout>
+        <Home />
+      </Layout>
     </>
   );
 };

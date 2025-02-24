@@ -1,8 +1,12 @@
 export interface TaskForm {
   taskText: string;
-  taskStatus: false;
+  taskStatus: boolean;
+}
+
+export interface Task extends TaskForm {
+  id: string;
 }
 
 export interface TaskAPI {
-  [id: string]: TaskState;
+  [id: string]: TaskForm;
 }
