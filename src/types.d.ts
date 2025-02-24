@@ -1,6 +1,6 @@
 export interface TaskForm {
-  taskText: string;
-  taskStatus: boolean;
+  text: string;
+  status: boolean;
 }
 
 export interface Task extends TaskForm {

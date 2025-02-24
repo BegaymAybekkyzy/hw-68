@@ -1,6 +1,5 @@
-import Home from './Containers/Home/Home.tsx';
-import Layout from './components/Layout/Layout.tsx';
-
+import Home from "./Containers/Home/Home.tsx";
+import Layout from "./components/Layout/Layout.tsx";
 
 const App = () => {
   return (

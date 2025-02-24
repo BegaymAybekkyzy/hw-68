@@ -2,7 +2,7 @@
   width: 120px;
   height: 22px;
   border-radius: 40px;
-  color: #075eff;
+  color: #32751f;
   border: 2px solid;
   position: relative;
 }
@@ -19,5 +19,8 @@
   animation: l3 1s infinite linear;
 }
 @keyframes l3 {
-  50% {left:100%;transform: translateX(calc(-100% - 4px))}
+  50% {
+    left: 100%;
+    transform: translateX(calc(-100% - 4px));
+  }
 }

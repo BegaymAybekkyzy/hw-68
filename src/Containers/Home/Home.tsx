@@ -1,61 +1,105 @@
-import TaskForm from '../../components/TasksForm/TasksForm.tsx';
-import { Button } from 'react-bootstrap';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchTasks } from './TasksThunks.ts';
-import { AppDispatch, RootState } from '../../app/store.ts';
-import Loader from '../../components/Loader/Loader.tsx';
-import TaskCard from '../../components/TaskCard/TaskCard.tsx';
+import TaskForm from "../../components/TasksForm/TasksForm.tsx";
+import { Button } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTasks, taskDelete, tasksSave } from "./TasksThunks.ts";
+import { AppDispatch, RootState } from "../../app/store.ts";
+import Loader from "../../components/Loader/Loader.tsx";
+import TaskCard from "../../components/TaskCard/TaskCard.tsx";
+import { check } from "./TasksSlice.ts";
 
 const Home = () => {
   const [formShow, setFormShow] = useState(false);
   const loading = useSelector((state: RootState) => state.tasks.loading);
-  const error = useSelector((state: RootState) => state.tasks.error);
   const tasksArray = useSelector((state: RootState) => state.tasks.tasks);
-
-  console.log(tasksArray);
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchTasks());
   }, [dispatch]);
 
+  const onchangeCheck = (id: string) => {
+    dispatch(check(id));
+  };
+
+  const onDelete = async (id: string) => {
+    await dispatch(taskDelete(id));
+    await dispatch(fetchTasks());
+  };
+
+  const onSave = () => {
+    dispatch(tasksSave(tasksArray));
+  };
 
   const formDisplay = () => {
-    setFormShow(prev => (!prev));
+    setFormShow((prev) => !prev);
   };
 
   let content: React.ReactNode | null = null;
-
+  const outstandingTasks = tasksArray.filter((task) => !task.status);
+  const completedTasks = tasksArray.filter((task) => task.status);
 
   if (loading) content = <Loader />;
-  if (!loading && !error) content = (
-    tasksArray.map((task) => (
-      <TaskCard key={task.id} text={task.taskText} />
-    ))
-  );
-  if (error) content = <h1 className="text-center">Произошла ошибка!</h1>;
+  if (!loading)
+    content = (
+      <>
+        <div>
+          <h1 className="text-center mb-3">Предстоит сделать</h1>
+          {outstandingTasks.length ? (
+            outstandingTasks.map((task) => (
+              <TaskCard
+                id={task.id}
+                key={task.id}
+                status={task.status}
+                onDelete={() => onDelete(task.id)}
+                onchangeCheck={() => onchangeCheck(task.id)}
+                text={task.text}
+              />
+            ))
+          ) : (
+            <p className="text-center">Нет задач</p>
+          )}
+        </div>
+
+        <div>
+          <h1 className="text-center mb-3">Выполненные задачи</h1>
+          {completedTasks.length ? (
+            completedTasks.map((task) => (
+              <TaskCard
+                id={task.id}
+                key={task.id}
+                status={task.status}
+                onDelete={() => onDelete(task.id)}
+                onchangeCheck={() => onchangeCheck(task.id)}
+                text={task.text}
+              />
+            ))
+          ) : (
+            <p className="text-center">Нет выполненных задач</p>
+          )}
+        </div>
+      </>
+    );
 
   return (
     <>
       <div className="d-flex justify-content-around align-items-center mb-5">
-        <div>
-          <Button onClick={formDisplay} variant="outline-primary">
-            {formShow ? 'Добавить новую задачу' : 'Скрыть форму'}
+        <div className="">
+          <Button
+            onClick={formDisplay}
+            variant="outline-success"
+            className="me-3"
+          >
+            {formShow ? "Добавить новую задачу" : "Скрыть форму"}
+          </Button>
+          <Button variant="outline-success" onClick={onSave}>
+            Сохранить прогресс
           </Button>
         </div>
-        <TaskForm show={formShow}/>
+        <TaskForm show={formShow} />
       </div>
-
-      <main>
-        <div>
-          <h1>Предстоит сделать</h1>
-          {content}
-        </div>
-        <div>
-          <h1>Выполненные задачи</h1>
-        </div>
-      </main>
+      <hr />
+      <main className="row row-cols-2">{content}</main>
     </>
   );
 };
