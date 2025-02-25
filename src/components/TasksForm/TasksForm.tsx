@@ -9,7 +9,7 @@ interface Props {
   show?: boolean;
 }
 
-const TasksForm: React.FC<Props> = ({ show }) => {
+const TasksForm: React.FC<Props> = ({ show = false }) => {
   const [form, setForm] = useState<TaskForm>({
     text: "",
     status: false,
@@ -35,8 +35,8 @@ const TasksForm: React.FC<Props> = ({ show }) => {
 
   let formDisplay: React.ReactNode | null;
 
-  if (show) formDisplay = null;
-  if (!show)
+  if (!show) formDisplay = null;
+  if (show)
     formDisplay = (
       <Form onSubmit={onSubmitForm}>
         <div className="row align-items-center">

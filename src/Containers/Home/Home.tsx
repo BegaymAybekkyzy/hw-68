@@ -42,7 +42,7 @@ const Home = () => {
   if (loading) content = <Loader />;
   if (!loading)
     content = (
-      <>
+      <main className="row row-cols-2">
         <div>
           <h1 className="text-center mb-3">Предстоит сделать</h1>
           {outstandingTasks.length ? (
@@ -78,7 +78,7 @@ const Home = () => {
             <p className="text-center">Нет выполненных задач</p>
           )}
         </div>
-      </>
+      </main>
     );
 
   return (
@@ -90,7 +90,7 @@ const Home = () => {
             variant="outline-success"
             className="me-3"
           >
-            {formShow ? "Добавить новую задачу" : "Скрыть форму"}
+            {formShow ? "Скрыть форму" : "Добавить новую задачу"}
           </Button>
           <Button variant="outline-success" onClick={onSave}>
             Сохранить прогресс
@@ -99,7 +99,7 @@ const Home = () => {
         <TaskForm show={formShow} />
       </div>
       <hr />
-      <main className="row row-cols-2">{content}</main>
+      <>{content}</>
     </>
   );
 };
